@@ -1,13 +1,4 @@
 services:
-  web:
-    build: .
-    command: bundle exec rails s -b '0.0.0.0'
-    ports:
-      - "3000:3000"
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgres://postgres:password@database:5432
   database:
     image: postgres
     ports:
@@ -19,6 +10,15 @@ services:
       POSTGRES_HOST: localhost
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:4.0.2-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: vhost
 
 volumes:
   postgres_data:
